@@ -10,7 +10,7 @@ use App\Models\Collection;
 use App\Models\Status;
 use App\Facades\Payment as PaymentFacade;
 use App\Traits\ResponseTrait;
-
+use App\Jobs\SyncPaymentTpago;
 class PaymentLinksController extends Controller
 {
     use ResponseTrait;
@@ -50,5 +50,20 @@ class PaymentLinksController extends Controller
         return $this->success([
             'url' => $payment->link_url
         ]);
+    }
+
+    public function callback(Request $request){
+        $params = $request->all();
+        $reply = [
+            'messages' => []
+        ];
+        $reply['status'] = $params['payment']['status'] == "confirmed" ? "success" : "error";
+        $reply['messages'][] = [
+            "level" => $reply['status'],
+            "key" => $params['payment']['status'] == "confirmed" ? "Confirmed" : "ConfirmedError",
+            "description" => $params['payment']['response_description'],
+        ];
+        SyncPaymentTpago::dispatch($reply, $params);
+        return response()->json($reply);
     }
 }

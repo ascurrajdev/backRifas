@@ -26,7 +26,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::prefix('raffles')->group(function(){
         Route::get('details/{uuid}',[ClientsController::class, 'getDetails'])->withoutMiddleware('auth:sanctum');
     });
-    Route::prefix('payment')->group(function(){
-        Route::post('generate',[PaymentLinksController::class,'generateLink'])->withoutMiddleware('auth:sanctum');
-    });
+});
+Route::prefix('payments')->group(function(){
+    Route::post('generate',[PaymentLinksController::class,'generateLink']);
+    Route::post("tpago/callback",[PaymentLinksController::class,'callback']);
 });

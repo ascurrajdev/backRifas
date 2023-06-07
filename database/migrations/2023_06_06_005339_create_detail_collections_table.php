@@ -18,7 +18,6 @@ return new class extends Migration
             $table->double("amount");
             $table->foreignId("collection_id");
             $table->foreign("collection_id")->references("id")->on("collections");
-            $table->double("paid")->nullable()->default(0);
             $table->timestamps();
         });
     }
