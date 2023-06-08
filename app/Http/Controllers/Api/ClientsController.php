@@ -22,9 +22,18 @@ class ClientsController extends Controller
         return new ClientResource($client);
     }
 
+
     public function store(StoreClient $request){
         $params = $request->validated();
-        $client = Client::create($params);
+        $client = Client::updateOrCreate(
+            [
+                'email' => $params['email']
+            ],
+            [
+                'cellphone' => $params['cellphone'],
+                'name' => $params['name'],
+            ]
+        );
         return new ClientResource($client);
     }
 

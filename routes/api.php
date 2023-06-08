@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ClientsController;
 use App\Http\Controllers\Api\PaymentLinksController;
+use App\Http\Controllers\Api\RafflesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,7 +25,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::delete('{client}',[ClientsController::class, 'delete']);
     });
     Route::prefix('raffles')->group(function(){
-        Route::get('details/{uuid}',[ClientsController::class, 'getDetails'])->withoutMiddleware('auth:sanctum');
+        Route::get('details/{token}',[RafflesController::class, 'getDetails'])->withoutMiddleware('auth:sanctum');
     });
 });
 Route::prefix('payments')->group(function(){

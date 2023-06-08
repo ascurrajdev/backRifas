@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Raffle;
+use App\Models\Status;
 use App\Models\Payment;
 use App\Models\Collection;
-use App\Models\Status;
-use App\Facades\Payment as PaymentFacade;
+use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use App\Jobs\SyncPaymentTpago;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Facades\Payment as PaymentFacade;
+
 class PaymentLinksController extends Controller
 {
     use ResponseTrait;
@@ -23,7 +25,7 @@ class PaymentLinksController extends Controller
         ]);
         $pending = Status::where('is_pending',true)->first();
         $raffle = Raffle::findOrFail($request->raffle_id);
-        $response = PaymentFacade::generateLink($request->input('quantity',0)."x ".$raffle->name,($raffle->amount * $request->input('quantity',0)));
+        $response = PaymentFacade::generateLink($request->input('quantity',0)."x ".$raffle->description,($raffle->amount * $request->input('quantity',0)));
         $payment = Payment::create([
             'amount' => $response['payment_link']['amount'],
             'currency' => 'PYG',
@@ -54,6 +56,7 @@ class PaymentLinksController extends Controller
 
     public function callback(Request $request){
         $params = $request->all();
+        Log::info($params);
         $reply = [
             'messages' => []
         ];

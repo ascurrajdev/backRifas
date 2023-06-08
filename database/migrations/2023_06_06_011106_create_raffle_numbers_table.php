@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign("client_id")->on("clients")->references("id");
             $table->foreign("collection_id")->on("collections")->references("id");
             $table->foreign("raffle_id")->on("raffles")->references("id");
-            $table->integer('number');
+            $table->string('number')->nullable();
             $table->timestamps();
         });
     }

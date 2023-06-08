@@ -8,17 +8,18 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Payment;
 
-class ConfirmPayment extends Mailable
+class ConfirmPayment extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
-
+    public $payment;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(Payment $payment)
     {
-        //
+        $this->payment = $payment;
     }
 
     /**
@@ -27,7 +28,7 @@ class ConfirmPayment extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Confirm Payment',
+            subject: 'Pago Confirmado',
         );
     }
 
@@ -37,7 +38,11 @@ class ConfirmPayment extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.payments_confirm',
+            markdown: 'emails.payments.confirm',
+            with:[
+                'description' => $this->payment->description,
+                'amount' => $this->payment->amount
+            ]
         );
     }
 
