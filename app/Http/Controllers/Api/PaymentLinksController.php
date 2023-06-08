@@ -28,9 +28,9 @@ class PaymentLinksController extends Controller
         $pending = Status::where('is_pending',true)->first();
         $raffle = Raffle::findOrFail($request->raffle_id);
         $userRaffle = UserRaffle::where('user_id',$request->user_id)->where('raffle_id',$request->raffle_id)->first();
-        $raffleNumber = RaffleNumber::where('user_id',$request->user)->where('raffle_id',$request->raffle_id)->orderBy('created_at','desc')->first();
+        $raffleNumber = RaffleNumber::where('user_id',$request->user_id)->where('raffle_id',$request->raffle_id)->orderBy('created_at','desc')->first();
         $number = !empty($raffleNumber) ? $raffleNumber->number : $userRaffle->min_number - 1;
-        if(!empty($number)){
+        if(empty($number)){
             $number = 0;
         }
         if((($number + $request->quantity) > $userRaffle->max_number) && !empty($userRaffle->max_number)){
