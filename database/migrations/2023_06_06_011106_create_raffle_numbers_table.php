@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('raffle_numbers', function (Blueprint $table) {
             $table->id();
             $table->foreignId("client_id");
+            $table->foreignId("user_id");
             $table->foreignId("collection_id");
             $table->foreignId("raffle_id");
             $table->foreign("client_id")->on("clients")->references("id");
+            $table->foreign("user_id")->on("users")->references("id");
             $table->foreign("collection_id")->on("collections")->references("id");
             $table->foreign("raffle_id")->on("raffles")->references("id");
             $table->string('number')->nullable();

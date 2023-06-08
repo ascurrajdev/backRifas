@@ -18,4 +18,8 @@ class Collection extends Model
     public function detailPayment(){
         return $this->hasMany(PaymentCollection::class);
     }
+
+    public function client(){
+        return $this->belongsTo(Client::class);
+    }
 }

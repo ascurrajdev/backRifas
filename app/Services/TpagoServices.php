@@ -16,6 +16,6 @@ class TpagoServices implements PaymentService{
         ]);
     }
     public function reversePayment(string $identifier){
-        return $this->tpagoClient->put("/payments/revert/{$identifier}");
+        return $this->tpagoClient->put("payments/revert/{$identifier}");
     }
 }

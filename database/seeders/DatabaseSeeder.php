@@ -29,7 +29,9 @@ class DatabaseSeeder extends Seeder
         UserRaffle::create([
             'raffle_id' => $raffle->id,
             'user_id' => $user->id,
-            'id' => Str::uuid()->toString()
+            'id' => Str::uuid()->toString(),
+            'max_number' => 2,
+            'min_number' => 1
         ]);
     }
 }

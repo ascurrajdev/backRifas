@@ -12,6 +12,8 @@ use App\Jobs\SyncPaymentTpago;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Facades\Payment as PaymentFacade;
+use App\Models\RaffleNumber;
+use App\Models\UserRaffle;
 
 class PaymentLinksController extends Controller
 {
@@ -25,6 +27,15 @@ class PaymentLinksController extends Controller
         ]);
         $pending = Status::where('is_pending',true)->first();
         $raffle = Raffle::findOrFail($request->raffle_id);
+        $userRaffle = UserRaffle::where('user_id',$request->user_id)->where('raffle_id',$request->raffle_id)->first();
+        $raffleNumber = RaffleNumber::where('user_id',$request->user)->where('raffle_id',$request->raffle_id)->orderBy('created_at','desc')->first();
+        $number = !empty($raffleNumber) ? $raffleNumber->number : $userRaffle->min_number - 1;
+        if(!empty($number)){
+            $number = 0;
+        }
+        if((($number + $request->quantity) > $userRaffle->max_number) && !empty($userRaffle->max_number)){
+            return $this->error("Excede la cantidad de rifas disponibles del usuario (".($userRaffle->max_number - $number)." disponibles)",422);
+        }
         $response = PaymentFacade::generateLink($request->input('quantity',0)."x ".$raffle->description,($raffle->amount * $request->input('quantity',0)));
         $payment = Payment::create([
             'amount' => $response['payment_link']['amount'],
