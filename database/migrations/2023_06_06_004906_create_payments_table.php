@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->double('amount');
-            $table->currency('currency',3);
+            $table->string('currency',3);
             $table->foreignId('status_id');
             $table->string('description');
             $table->string("link_url")->nullable();

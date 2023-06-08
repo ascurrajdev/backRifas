@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignId('user_id');
             $table->foreignId('raffle_id');
+            $table->uuid("token");
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('raffle_id')->references('id')->on('raffles');
             $table->timestamps();

@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ruffle_numbers', function (Blueprint $table) {
+        Schema::create('raffle_numbers', function (Blueprint $table) {
             $table->id();
             $table->foreignId("client_id");
             $table->foreignId("collection_id");
-            $table->foreignId("ruffle_id");
+            $table->foreignId("raffle_id");
             $table->foreign("client_id")->on("clients")->references("id");
             $table->foreign("collection_id")->on("collections")->references("id");
-            $table->foreign("ruffle_id")->on("ruffles")->references("id");
+            $table->foreign("raffle_id")->on("raffles")->references("id");
             $table->integer('number');
             $table->timestamps();
         });
