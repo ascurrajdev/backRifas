@@ -14,6 +14,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\Log;
 
 class SyncPaymentTpago implements ShouldQueue
 {
@@ -34,6 +35,7 @@ class SyncPaymentTpago implements ShouldQueue
      */
     public function handle(): void
     {
+        Log::info($this->reply);
         $done = Status::where('is_done',true)->first();
         $payment = Payment::with('collection')->where('identifier_provider',$this->params['payment']['link_alias'])->first();
         if($this->reply['status'] == 'success' && !empty($payment) && $payment->status_id != $done->id){
