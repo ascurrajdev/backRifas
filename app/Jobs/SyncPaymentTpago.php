@@ -52,10 +52,10 @@ class SyncPaymentTpago implements ShouldQueue
                 foreach($collection->detail as $item){
                     for($i = 1; $i <= $item->quantity; $i++){
                         $userRaffle = UserRaffle::where('user_id',$collection->user_id)->where('raffle_id',$item->raffle_id)->first();
-                        $raffleNumbers = RaffleNumber::where('raffle_id',$item->raffle_id)->get(['number','user_id','created_at']);
+                        $raffleNumbers = RaffleNumber::where('raffle_id',$item->raffle_id)->get(['number','user_id','id']);
                         $number = 1;
                         if($raffleNumbers->count() > 0){
-                            $lastRaffleNumber = $raffleNumbers->where('user_id',$collection->user_id)->sortByDesc('created_at')->first();
+                            $lastRaffleNumber = $raffleNumbers->where('user_id',$collection->user_id)->sortByDesc('id')->first();
                             if(!empty($lastRaffleNumber)){
                                 $number = $lastRaffleNumber->number + 1;
                             }else if(!empty($userRaffle)){
