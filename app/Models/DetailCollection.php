@@ -9,4 +9,8 @@ class DetailCollection extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function raffle(){
+        return $this->belongsTo(Raffle::class);
+    }
 }

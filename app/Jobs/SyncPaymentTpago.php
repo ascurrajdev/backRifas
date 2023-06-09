@@ -6,6 +6,7 @@ use App\Models\Status;
 use App\Models\Payment;
 use App\Models\UserRaffle;
 use App\Mail\ConfirmPayment;
+use App\Mail\ConfirmPaymentToUser;
 use App\Models\RaffleNumber;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Mail;
@@ -43,8 +44,9 @@ class SyncPaymentTpago implements ShouldQueue
                 'status_id' => $done->id
             ]);
             foreach($payment->collection as $collection){
-                $collection->load(['client','detail']);
+                $collection->load(['client','detail','user']);
                 Mail::to($collection->client->email)->send(new ConfirmPayment($payment));
+                Mail::to($collection->user->email)->send(new ConfirmPaymentToUser($collection));
                 $collection->paid += $payment->amount;
                 $collection->save();
                 foreach($collection->detail as $item){
