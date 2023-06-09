@@ -10,6 +10,6 @@ Hola {{$userName}}, recibiste un pago de Gs. {{$amount}} realizado por {{$client
 @endforeach
 </x-mail::table>
 
-Desde ya que tenga un buen resto de jornada,<br>
+Atentamente,<br>
 {{ config('app.name') }}
 </x-mail::message>
