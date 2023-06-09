@@ -26,4 +26,8 @@ class Collection extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function raffleNumbers(){
+        return $this->hasMany(RaffleNumber::class);
+    }
 }

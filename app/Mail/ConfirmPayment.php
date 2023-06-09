@@ -9,17 +9,27 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Payment;
+use App\Models\Collection;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Mail\Mailables\Attachment;
 
 class ConfirmPayment extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
     public $payment;
+    public $collection;
     /**
      * Create a new message instance.
      */
-    public function __construct(Payment $payment)
+    public function __construct(Payment $payment, Collection $collection)
     {
         $this->payment = $payment;
+        $collection->load([
+            'raffleNumbers.raffle',
+            'client',
+            'user'
+        ]);
+        $this->collection = $collection;
     }
 
     /**
@@ -53,6 +63,14 @@ class ConfirmPayment extends Mailable implements ShouldQueue
      */
     public function attachments(): array
     {
-        return [];
+        $attachments = [];
+        $customPaper = array(0,0,340,190);
+        foreach($this->collection->raffleNumbers as $raffleNumber){
+            $attachments[] = Attachment::fromData(fn () => Pdf::loadView('pdf.raffles.number',[
+                'raffleNumber' => $raffleNumber,
+                'collection' => $this->collection
+            ])->setPaper($customPaper)->output(),"Rifa-{$raffleNumber->number}.pdf")->withMime('application/pdf');
+        }
+        return $attachments;
     }
 }

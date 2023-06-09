@@ -16,7 +16,8 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 */
 
 Route::get('/', function () {
-    $customPaper = array(0,0,340,190);
-    $pdf = Pdf::loadView('pdf.raffles.number')->setPaper($customPaper);
-    return $pdf->stream();
+    // $customPaper = array(0,0,340,190);
+    // $pdf = Pdf::loadView('pdf.raffles.number')->setPaper($customPaper);
+    // return $pdf->stream();
+    return view('welcome');
 });

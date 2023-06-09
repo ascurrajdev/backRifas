@@ -67,21 +67,20 @@
     <body>
         <div class="container-header">
             <div class="left numberContainer">
-                <h2 class="px-1 text-center">N. 67</h2>
+                <h2 class="px-1 text-center">N. {{$raffleNumber->number}}</h2>
             </div>
             <div class="left titleContainer">
-                <h4 class="px-1">Rifa Solidaria</h4>
+                <h4 class="px-1">{{$raffleNumber->raffle->description}}</h4>
             </div>
         </div>
         <div class="container-body">
-            <li>Nombre: Jose Ascurra</li>
-            <li>Telefono: 0991631870</li>
-            <li>Correo: joseascurra123@gmail.com</li>
-            <li>Vendedor: Jose Ascurra</li>
+            <li>Nombre: {{$collection->client->name}}</li>
+            <li>Telefono: {{$collection->client->cellphone}}</li>
+            <li>Correo: {{$collection->client->email}}</li>
+            <li>Vendedor: {{$collection->user->name}}</li>
         </div>
-        <img src="" alt="" />
         <div class="container-footer">
-            <p>Desarrollado por <a class="a-none" href="www.ascurrajdev.co">ascurrajdev</a></p>
+            <p>Desarrollado por <a class="a-none" href="https://www.ascurrajdev.co">ascurrajdev</a></p>
         </div>
     </body>
 </html>

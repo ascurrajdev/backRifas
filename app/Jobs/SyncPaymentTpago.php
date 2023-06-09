@@ -45,7 +45,7 @@ class SyncPaymentTpago implements ShouldQueue
             ]);
             foreach($payment->collection as $collection){
                 $collection->load(['client','detail','user']);
-                Mail::to($collection->client->email)->send(new ConfirmPayment($payment));
+                Mail::to($collection->client->email)->send(new ConfirmPayment($payment, $collection));
                 Mail::to($collection->user->email)->send(new ConfirmPaymentToUser($collection));
                 $collection->paid += $payment->amount;
                 $collection->save();
