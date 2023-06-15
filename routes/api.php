@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\ClientsController;
+use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\PaymentLinksController;
 use App\Http\Controllers\Api\RafflesController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
+Route::post('login',[LoginController::class,'login'])->name('login');
 Route::middleware('auth:sanctum')->group(function(){
     Route::prefix('clients')->group(function(){
         Route::get('',[ClientsController::class, 'index'])->withoutMiddleware('auth:sanctum');
