@@ -24,9 +24,8 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::post('',[ClientsController::class, 'store'])->withoutMiddleware('auth:sanctum');
         Route::delete('{client}',[ClientsController::class, 'delete']);
     });
-    Route::prefix('raffles')->group(function(){
-        Route::get('details/{token}',[RafflesController::class, 'getDetails'])->withoutMiddleware('auth:sanctum');
-    });
+    Route::apiResource("raffle",RafflesController::class);
+    Route::get('raffles/details/{token}',[RafflesController::class, 'getDetails'])->withoutMiddleware('auth:sanctum');
 });
 Route::prefix('payments')->group(function(){
     Route::post('generate',[PaymentLinksController::class,'generateLink']);
