@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Raffle;
 use App\Models\UserRaffle;
 use App\Models\RaffleNumber;
-use App\Models\Raffle;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRaffle;
 use App\Http\Requests\UpdateRaffle;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class RafflesController extends Controller
 {
@@ -32,7 +33,12 @@ class RafflesController extends Controller
 
     public function store(StoreRaffle $request){
         $params = $request->validated();
-        
+        if($request->hasFile("image")){
+            $params["image_url"] = Storage::url($request->file('image')->store("raffles"));
+            unset($params['image']);
+        }
+        $raffle = Raffle::create($params);
+        return $raffle;
     }
 
     public function update(Raffle $raffle, UpdateRaffle $request){
