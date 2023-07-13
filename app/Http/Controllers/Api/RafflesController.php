@@ -8,6 +8,8 @@ use App\Models\Raffle;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreRaffle;
+use App\Http\Requests\UpdateRaffle;
 
 class RafflesController extends Controller
 {
@@ -28,12 +30,13 @@ class RafflesController extends Controller
         return $raffle;
     }
 
-    public function store(){
-
+    public function store(StoreRaffle $request){
+        $params = $request->validated();
+        
     }
 
-    public function update(Raffle $raffle, ){
-
+    public function update(Raffle $raffle, UpdateRaffle $request){
+        $params = $request->validated();
     }
     public function delete(Raffle $raffle){
         $raffle->delete();

@@ -22,7 +22,9 @@ class StoreRaffle extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'description' => ['required','string','min:3', 'max:255'],
+            'amount' => ['required','numeric'],
+            'image' => ['file','mimes:png,jpg']
         ];
     }
 }
