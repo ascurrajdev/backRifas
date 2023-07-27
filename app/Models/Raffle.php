@@ -11,10 +11,10 @@ class Raffle extends Model
     protected $guarded = [];
 
     public function admin(){
-        return $this->belongsToMany(User::class)->using(AdminRaffles::class);
+        return $this->belongsToMany(User::class,"admin_raffles");
     }
 
     public function users(){
-        return $this->belongsToMany(User::class)->using(UserRaffles::class);
+        return $this->belongsToMany(User::class,"user_raffles");
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Raffle;
 use App\Models\UserRaffle;
+use Illuminate\Support\Str;
 use App\Models\RaffleNumber;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
@@ -39,7 +40,9 @@ class RafflesController extends Controller
         }
         $raffle = Raffle::create($params);
         $raffle->admin()->attach($request->user()->id);
-        $raffle->users()->attach($request->user()->id);
+        $raffle->users()->attach($request->user()->id,[
+            "id" => (string) Str::uuid()
+        ]);
         return $raffle;
     }
 
