@@ -16,8 +16,9 @@ class StoreRaffleTest extends TestCase
      */
     public function can_store_a_raffle_with_a_file(): void
     {
+        $user = User::factory()->create();
         Sanctum::actingAs(
-            User::factory()->create(),
+            $user,
             ['*']
         );
         $file = UploadedFile::fake()->image("test.png");
@@ -27,5 +28,7 @@ class StoreRaffleTest extends TestCase
             'amount' => 1000
         ]);
         $response->assertSuccessful();
+        $this->assertDatabaseCount("user_raffles",1);
+        $this->assertDatabaseCount("admin_raffles",1);
     }
 }

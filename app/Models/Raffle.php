@@ -9,4 +9,12 @@ class Raffle extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function admin(){
+        return $this->belongsToMany(User::class)->using(AdminRaffles::class);
+    }
+
+    public function users(){
+        return $this->belongsToMany(User::class)->using(UserRaffles::class);
+    }
 }

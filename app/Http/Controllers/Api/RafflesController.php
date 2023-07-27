@@ -38,6 +38,8 @@ class RafflesController extends Controller
             unset($params['image']);
         }
         $raffle = Raffle::create($params);
+        $raffle->admin()->attach($request->user()->id);
+        $raffle->users()->attach($request->user()->id);
         return $raffle;
     }
 
