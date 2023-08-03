@@ -1,1 +1,0 @@
-- Falta realizar para que el endpoint de registro de rifas, pueda asociarse directamente con el usuario que lo creo, y que a ese usuario lo haga administrador

@@ -11,6 +11,7 @@ use App\Traits\ResponseTrait;
 use App\Http\Requests\StoreRaffle;
 use App\Http\Requests\UpdateRaffle;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RaffleResource;
 use Illuminate\Support\Facades\Storage;
 
 class RafflesController extends Controller
@@ -29,7 +30,7 @@ class RafflesController extends Controller
     }
 
     public function show(Raffle $raffle){
-        return $raffle;
+        return new RaffleResource($raffle);
     }
 
     public function store(StoreRaffle $request){

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdminRafflesController;
 use App\Http\Controllers\Api\ClientsController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\PaymentLinksController;
@@ -25,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::delete('{client}',[ClientsController::class, 'delete']);
     });
     Route::apiResource("raffles",RafflesController::class);
+    Route::get('raffles/{raffle}/admin',[AdminRafflesController::class,'index'])->name('raffles.admin.index');
     Route::get('raffles/details/{token}',[RafflesController::class, 'getDetails'])->withoutMiddleware('auth:sanctum');
 });
 Route::prefix('payments')->group(function(){

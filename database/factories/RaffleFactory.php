@@ -17,7 +17,8 @@ class RaffleFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'description' => fake()->text(),
+            'amount' => fake()->numberBetween(1,10),
         ];
     }
 }
