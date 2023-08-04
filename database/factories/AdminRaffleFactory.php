@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Raffle;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,8 @@ class AdminRaffleFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'raffle_id' => Raffle::factory(),
+            'user_id' => User::factory(),
         ];
     }
 }
