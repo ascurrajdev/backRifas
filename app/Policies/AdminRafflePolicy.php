@@ -16,13 +16,13 @@ class AdminRafflePolicy
         return $user->tokenCan("list_admin_raffle");
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, AdminRaffle $adminRaffle): bool
-    {
+    // /**
+    //  * Determine whether the user can view the model.
+    //  */
+    // public function view(User $user, AdminRaffle $adminRaffle): bool
+    // {
 
-    }
+    // }
 
     /**
      * Determine whether the user can create models.
@@ -32,29 +32,29 @@ class AdminRafflePolicy
         return $user->tokenCan("create_admin_raffle");
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, AdminRaffle $adminRaffle): bool
-    {
+    // /**
+    //  * Determine whether the user can update the model.
+    //  */
+    // public function update(User $user, AdminRaffle $adminRaffle): bool
+    // {
         
-    }
+    // }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, AdminRaffle $adminRaffle): bool
-    {
+    // /**
+    //  * Determine whether the user can delete the model.
+    //  */
+    // public function delete(User $user, AdminRaffle $adminRaffle): bool
+    // {
         
-    }
+    // }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, AdminRaffle $adminRaffle): bool
-    {
-        //
-    }
+    // /**
+    //  * Determine whether the user can restore the model.
+    //  */
+    // public function restore(User $user, AdminRaffle $adminRaffle): bool
+    // {
+    //     //
+    // }
 
     /**
      * Determine whether the user can permanently delete the model.

@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 
 class AdminRafflesController extends Controller
 {
-    public function index(Request $request){
+    public function index(){
+        $this->authorize("viewAny",AdminRaffle::class);
         return AdminRaffleResource::collection(AdminRaffle::get());
     }
 }
