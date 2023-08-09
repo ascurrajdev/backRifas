@@ -22,10 +22,16 @@ class AdminRafflesController extends Controller
     }
 
     public function store(Raffle $raffle, StoreAdminRaffle $request){
-        $params = $request->validated();
         $this->authorize("create",AdminRaffle::class);
+        $params = $request->validated();
         $params["raffle_id"] = $raffle->id;
         $adminRaffle = AdminRaffle::create($params);
+        return new AdminRaffleResource($adminRaffle);
+    }
+
+    public function delete(Raffle $raffle, AdminRaffle $adminRaffle){
+        $this->authorize("delete",$adminRaffle);
+        $adminRaffle->delete();
         return new AdminRaffleResource($adminRaffle);
     }
 }
