@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\AdminRaffle;
+use App\Models\Raffle;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\DB;
@@ -12,25 +13,26 @@ class AdminRafflePolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user, $raffleId): bool
     {
-        return $user->tokenCan("list_admin_raffle");
+        return $user->tokenCan("list_admin_raffle") || DB::table('admin_raffles')->select(['id'])->where('user_id',$user->id)->where('raffle_id',$raffleId)->exists();
     }
-
-    // /**
-    //  * Determine whether the user can view the model.
-    //  */
-    // public function view(User $user, AdminRaffle $adminRaffle): bool
-    // {
-
-    // }
+    
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, AdminRaffle $adminRaffle): bool
+    {
+        return $user->tokenCan("view_admin_raffle") || DB::table('admin_raffles')->select(['id'])->where('user_id',$user->id)->where('raffle_id',$adminRaffle->raffle_id)->exists();
+    }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user,int $raffleId): bool
     {
-        return $user->tokenCan("create_admin_raffle");
+        $exists = DB::table('admin_raffles')->select(['id'])->where('user_id',$user->id)->where('raffle_id',$raffleId)->exists();
+        return $user->tokenCan("create_admin_raffle") || $exists;
     }
 
     // /**

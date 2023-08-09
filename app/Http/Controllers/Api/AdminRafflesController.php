@@ -7,22 +7,21 @@ use App\Http\Requests\StoreAdminRaffle;
 use App\Http\Resources\AdminRaffleResource;
 use App\Models\AdminRaffle;
 use App\Models\Raffle;
-use Illuminate\Http\Request;
 
 class AdminRafflesController extends Controller
 {
-    public function index(){
-        $this->authorize("viewAny",AdminRaffle::class);
+    public function index($raffle){
+        $this->authorize("viewAny",[AdminRaffle::class, $raffle]);
         return AdminRaffleResource::collection(AdminRaffle::get());
     }
     
     public function show(Raffle $raffle, AdminRaffle $adminRaffle){
-        $this->authorize("viewAny",AdminRaffle::class);
+        $this->authorize("view",$adminRaffle);
         return new AdminRaffleResource($adminRaffle);
     }
 
     public function store(Raffle $raffle, StoreAdminRaffle $request){
-        $this->authorize("create",AdminRaffle::class);
+        $this->authorize("create",[AdminRaffle::class,$raffle->id]);
         $params = $request->validated();
         $params["raffle_id"] = $raffle->id;
         $adminRaffle = AdminRaffle::create($params);
