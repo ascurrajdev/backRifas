@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::apiResource("raffles",RafflesController::class);
     Route::get('raffles/{raffle}/admin',[AdminRafflesController::class,'index'])->name('raffles.admin.index');
     Route::get('raffles/{raffle}/admin/{adminRaffle}',[AdminRafflesController::class,'show'])->name('raffles.admin.show');
+    Route::post('raffles/{raffle}/admin',[AdminRafflesController::class,'store'])->name('raffles.admin.store');
     Route::get('raffles/details/{token}',[RafflesController::class, 'getDetails'])->withoutMiddleware('auth:sanctum');
 });
 Route::prefix('payments')->group(function(){

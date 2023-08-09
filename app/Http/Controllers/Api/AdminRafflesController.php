@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreAdminRaffle;
 use App\Http\Resources\AdminRaffleResource;
 use App\Models\AdminRaffle;
 use App\Models\Raffle;
@@ -17,6 +18,14 @@ class AdminRafflesController extends Controller
     
     public function show(Raffle $raffle, AdminRaffle $adminRaffle){
         $this->authorize("viewAny",AdminRaffle::class);
+        return new AdminRaffleResource($adminRaffle);
+    }
+
+    public function store(Raffle $raffle, StoreAdminRaffle $request){
+        $params = $request->validated();
+        $this->authorize("create",AdminRaffle::class);
+        $params["raffle_id"] = $raffle->id;
+        $adminRaffle = AdminRaffle::create($params);
         return new AdminRaffleResource($adminRaffle);
     }
 }
