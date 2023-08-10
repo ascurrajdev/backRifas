@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Raffle;
 use App\Models\UserRaffle;
+use App\Models\AdminRaffle;
 use Illuminate\Support\Str;
 use App\Models\RaffleNumber;
 use Illuminate\Http\Request;
@@ -19,14 +20,16 @@ class RafflesController extends Controller
     use ResponseTrait;
 
     public function index(Request $request){
+        $this->authorize("viewAny",[Raffle::class]);
         $raffles = Raffle::query();
         $user = $request->user();
         $rafflesForUser = UserRaffle::where('user_id',$user->id)->get(['id'])->pluck('id')->toArray();
-        $raffles->where("id",$rafflesForUser);
+        $rafflesForAdmin = AdminRaffle::where('user_id',$user->id)->get(['id'])->pluck('id')->toArray();
+        $raffles->where("id",array_merge($rafflesForUser,$rafflesForAdmin));
         foreach($request->input('filters',[]) as $key => $value){
             $raffles->{$key}($value);
         }
-        return $raffles->get();
+        return RaffleResource::collection($raffles->get());
     }
 
     public function show(Raffle $raffle){
@@ -44,7 +47,7 @@ class RafflesController extends Controller
         $raffle->users()->attach($request->user()->id,[
             "id" => (string) Str::uuid()
         ]);
-        return $raffle;
+        return new RaffleResource($raffle);
     }
 
     public function update(Raffle $raffle, UpdateRaffle $request){
@@ -52,7 +55,7 @@ class RafflesController extends Controller
     }
     public function delete(Raffle $raffle){
         $raffle->delete();
-        return $raffle;
+        return new RaffleResource($raffle);
     }
 
     public function getDetails($token){
