@@ -19,7 +19,7 @@ class ListRafflesTest extends TestCase
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user, [
-            "list_raffles"
+            "*"
         ]);
         Raffle::factory()->count(10)->create();
         $raffle = Raffle::first();

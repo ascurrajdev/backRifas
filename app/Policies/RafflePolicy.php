@@ -13,7 +13,7 @@ class RafflePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->tokenCan("list_raffles");
+        return true;
     }
 
     /**
