@@ -39,7 +39,7 @@ class RafflesController extends Controller
     public function store(StoreRaffle $request){
         $params = $request->validated();
         if($request->hasFile("image")){
-            $params["image_url"] = Storage::url($request->file('image')->store("raffles"));
+            $params["image_url"] = Storage::url($request->file('image')->store("raffles","public"));
             unset($params['image']);
         }
         $raffle = Raffle::create($params);
