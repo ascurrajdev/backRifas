@@ -23,8 +23,9 @@ class RafflesController extends Controller
         $this->authorize("viewAny",[Raffle::class]);
         $raffles = Raffle::query();
         $user = $request->user();
-        $rafflesForUser = UserRaffle::where('user_id',$user->id)->get(['id'])->pluck('id')->toArray();
-        $rafflesForAdmin = AdminRaffle::where('user_id',$user->id)->get(['id'])->pluck('id')->toArray();
+        $rafflesForUser = UserRaffle::where('user_id',$user->id)->get(['raffle_id'])->pluck('raffle_id')->toArray();
+        $rafflesForAdmin = AdminRaffle::where('user_id',$user->id)->get(['raffle_id'])->pluck('raffle_id')->toArray();
+         
         $raffles->where("id",array_merge($rafflesForUser,$rafflesForAdmin));
         foreach($request->input('filters',[]) as $key => $value){
             $raffles->{$key}($value);

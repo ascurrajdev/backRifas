@@ -20,6 +20,7 @@ class RaffleResource extends JsonResource
             "amount" => $this->resource->amount,
             "created_at" => $this->resource->created_at->format("Y-m-d H:i:s"),
             "updated_at" => $this->resource->updated_at->format("Y-m-d H:i:s"),
+            'image_url' => $this->resource->image_url,
             "users" => $this->whenLoaded("users"),
             "admin" => $this->whenLoaded("admin"),
             "numbers" => $this->whenLoaded("numbers")
