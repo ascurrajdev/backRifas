@@ -19,6 +19,11 @@ class RafflesController extends Controller
 {
     use ResponseTrait;
 
+    public function statistics(Raffle $raffle){
+        $statisticQuantitySold = DB::table('raffles')->leftJoin('raffle_numbers','raffles.id','=','raffle_numbers.raffle_id')->selectRaw('raffles.id, raffles.quantity, COUNT(raffle_numbers.id) as sold')->whereRaw('raffles.id = ?',[$raffle->id])->groupBy(['raffles.id','raffles.quantity'])->first();
+        
+    }
+
     public function index(Request $request){
         $this->authorize("viewAny",[Raffle::class]);
         $raffles = Raffle::query();
