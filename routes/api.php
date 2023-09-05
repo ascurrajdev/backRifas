@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::delete('{client}',[ClientsController::class, 'delete']);
     });
     Route::apiResource("raffles",RafflesController::class);
-    Route::get('raffles/{raffleId}/statistics',[RafflesController::class, 'statistics'])->name('raffles.statistics');
+    Route::get('raffles/{raffle}/statistics',[RafflesController::class, 'statistics'])->name('raffles.statistics');
     Route::get('raffles/{raffle}/admin',[AdminRafflesController::class,'index'])->name('raffles.admin.index');
     Route::get('raffles/{raffle}/admin/{adminRaffle}',[AdminRafflesController::class,'show'])->name('raffles.admin.show');
     Route::post('raffles/{raffle}/admin',[AdminRafflesController::class,'store'])->name('raffles.admin.store');

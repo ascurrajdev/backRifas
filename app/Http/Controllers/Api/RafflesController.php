@@ -14,14 +14,17 @@ use App\Http\Requests\UpdateRaffle;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RaffleResource;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class RafflesController extends Controller
 {
     use ResponseTrait;
 
     public function statistics(Raffle $raffle){
-        $statisticQuantitySold = DB::table('raffles')->leftJoin('raffle_numbers','raffles.id','=','raffle_numbers.raffle_id')->selectRaw('raffles.id, raffles.quantity, COUNT(raffle_numbers.id) as sold')->whereRaw('raffles.id = ?',[$raffle->id])->groupBy(['raffles.id','raffles.quantity'])->first();
-        
+        $statisticQuantitySold = DB::table('raffles')->leftJoin('raffle_numbers','raffles.id','=','raffle_numbers.raffle_id')->leftJoin('collections','raffle_numbers.collection_id','=','collections.id')->selectRaw('raffles.id, raffles.quantity, COUNT(raffle_numbers.id) as sold_quantity, COALESCE(SUM(collections.paid),0) AS sold_amount')->whereRaw('raffles.id = ?',[$raffle->id])->groupBy(['raffles.id','raffles.quantity'])->first();
+        return $this->success([
+            "totals" => $statisticQuantitySold
+        ]);
     }
 
     public function index(Request $request){
