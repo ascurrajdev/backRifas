@@ -23,8 +23,20 @@ class RafflesController extends Controller
     public function statistics(Raffle $raffle){
         $statisticQuantitySold = DB::table('raffles')->leftJoin('raffle_numbers','raffles.id','=','raffle_numbers.raffle_id')->leftJoin('collections','raffle_numbers.collection_id','=','collections.id')->selectRaw('raffles.id, raffles.quantity, COUNT(raffle_numbers.id) as sold_quantity, COALESCE(SUM(collections.paid),0) AS sold_amount')->whereRaw('raffles.id = ?',[$raffle->id])->groupBy(['raffles.id','raffles.quantity'])->first();
         $detailsAmountByDate = DB::table('collections')->selectRaw('COALESCE(date(collections.created_at) ,CURDATE()) AS date_sold, COALESCE(SUM(collections.amount),0) AS amount_sold')->whereRaw('collections.id in (SELECT rn.collection_id from raffle_numbers rn where rn.raffle_id = ?)',[$raffle->id])->groupBy('collections.created_at')->get();
+        $detailsDateAmount = [];
+        $datesArray = collect(range(6,0))->map(function($value){
+            return now()->subDay($value)->format("Y-m-d");
+        });
+        foreach($datesArray as $value){
+            $detailsDateAmount[$value] = 0;
+        }
+        foreach($detailsAmountByDate as $detailAmount){
+            $detailsDateAmount[$detailAmount->date_sold] = $detailAmount->amount_sold;
+        }
         return $this->success([
-            "totals" => $statisticQuantitySold
+            "totals" => $statisticQuantitySold,
+            "dates" => $datesArray,
+            "details" => array_values($detailsDateAmount)
         ]);
     }
 
