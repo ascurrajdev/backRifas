@@ -23,21 +23,34 @@ class RafflesController extends Controller
     public function statistics(Raffle $raffle){
         $statisticQuantitySold = DB::table('raffles')->leftJoin('raffle_numbers','raffles.id','=','raffle_numbers.raffle_id')->leftJoin('collections','raffle_numbers.collection_id','=','collections.id')->selectRaw('raffles.id, raffles.quantity, COUNT(raffle_numbers.id) as sold_quantity, COALESCE(SUM(collections.paid),0) AS sold_amount')->whereRaw('raffles.id = ?',[$raffle->id])->groupBy(['raffles.id','raffles.quantity'])->first();
         $detailsAmountByDate = DB::table('collections')->selectRaw('COALESCE(date(collections.created_at) ,CURDATE()) AS date_sold, COALESCE(SUM(collections.amount),0) AS amount_sold')->whereRaw('collections.id in (SELECT rn.collection_id from raffle_numbers rn where rn.raffle_id = ?)',[$raffle->id])->groupBy('collections.created_at')->get();
-        $detailsAmountByUsersAndDate = DB::table('users')->selectRaw('users.name, COALESCE(date(raffle_numbers.created_at) ,CURDATE()) AS date_sold, COALESCE(SUM(collections.amount),0) AS amount_sold, COUNT(raffle_numbers.id) AS quantity_sold, raffles.quantity')->leftJoin('raffle_numbers','raffle_numbers.user_id','=','users.id')->leftJoin('raffles','raffles.id','=','raffle_numbers.raffle_id')->leftJoin('collections','collections.id','=','raffle_numbers.collection_id')->where('raffle_numbers.raffle_id','=',$raffle->id)->groupBy(['users.name','raffle_numbers.created_at','raffles.quantity'])->get();
+        $detailsAmountByUsersAndDate = DB::table('users')->selectRaw('users.name, users.id, COALESCE(date(raffle_numbers.created_at) ,CURDATE()) AS date_sold, COALESCE(SUM(collections.amount),0) AS amount_sold, COUNT(raffle_numbers.id) AS quantity_sold, raffles.quantity')->leftJoin('raffle_numbers','raffle_numbers.user_id','=','users.id')->leftJoin('raffles','raffles.id','=','raffle_numbers.raffle_id')->leftJoin('collections','collections.id','=','raffle_numbers.collection_id')->where('raffle_numbers.raffle_id','=',$raffle->id)->groupBy(['users.name','users.id','raffle_numbers.created_at','raffles.quantity'])->get();
+        $userRaffles = DB::table('user_raffles')->select(['user_raffles.user_id','users.name'])->leftJoin('users','users.id','=','user_raffles.user_id')->where('raffle_id',$raffle->id)->get();
         $detailsDateAmount = [];
         $datesArray = collect(range(6,0))->map(function($value){
             return now()->subDay($value)->format("Y-m-d");
         });
-        foreach($datesArray as $value){
-            $detailsDateAmount[$value] = 0;
+        $detailsTotalAmount = [];
+        foreach($datesArray as $date){
+            $detailsTotalAmount[$date] = $detailsAmountByDate->contains('date_sold',$date) ?  $detailsAmountByDate->where('date_sold',$date)->first()->amount_sold : 0;
         }
-        foreach($detailsAmountByDate as $detailAmount){
-            $detailsDateAmount[$detailAmount->date_sold] = $detailAmount->amount_sold;
+        $detailsDateAmount[] = [
+            'key' => 'Total Recaudado',
+            'data' => array_values($detailsTotalAmount)
+        ];
+        foreach($userRaffles as $user){
+            $detailsTotalAmount = [];
+            foreach($datesArray as $date){
+                $detailsTotalAmount[$date] = $detailsAmountByUsersAndDate->where('date_sold',$date)->where('id',$user->user_id)->isNotEmpty() ? $detailsAmountByUsersAndDate->where('date_sold',$date)->where('id',$user->user_id)->first()->amount_sold : 0;
+            }
+            $detailsDateAmount[] = [
+                'key' => $user->name,
+                'data' => array_values($detailsTotalAmount)
+            ];
         }
         return $this->success([
             "totals" => $statisticQuantitySold,
             "dates" => $datesArray,
-            "details" => array_values($detailsDateAmount),
+            "details" => $detailsDateAmount,
             'users' => $detailsAmountByUsersAndDate
         ]);
     }
