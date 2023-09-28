@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AdminRafflesController;
 use App\Http\Controllers\Api\ClientsController;
+use App\Http\Controllers\Api\CollectionsController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\PaymentLinksController;
 use App\Http\Controllers\Api\RafflesController;
@@ -20,11 +21,11 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('login',[LoginController::class,'login'])->name('login');
 Route::middleware('auth:sanctum')->group(function(){
-    Route::prefix('clients')->group(function(){
-        Route::get('',[ClientsController::class, 'index'])->withoutMiddleware('auth:sanctum');
-        Route::get('{client}',[ClientsController::class, 'show'])->withoutMiddleware('auth:sanctum');
-        Route::post('',[ClientsController::class, 'store'])->withoutMiddleware('auth:sanctum');
-        Route::delete('{client}',[ClientsController::class, 'delete']);
+    Route::prefix('clients')->name('clients.')->group(function(){
+        Route::get('',[ClientsController::class, 'index'])->name('index')->withoutMiddleware('auth:sanctum');
+        Route::get('{client}',[ClientsController::class, 'show'])->name('show')->withoutMiddleware('auth:sanctum');
+        Route::post('',[ClientsController::class, 'store'])->name('store')->withoutMiddleware('auth:sanctum');
+        Route::delete('{client}',[ClientsController::class, 'delete'])->name('delete');
     });
     Route::apiResource("raffles",RafflesController::class);
     Route::get('raffles/{raffle}/statistics',[RafflesController::class, 'statistics'])->name('raffles.statistics');
@@ -34,6 +35,10 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::delete('raffles/{raffle}/admin/{adminRaffle}',[AdminRafflesController::class,'delete'])->name('raffles.admin.delete');
     Route::get('raffles/details/{token}',[RafflesController::class, 'getDetails'])->withoutMiddleware('auth:sanctum');
     Route::get('raffles/{raffle}/users',[UserRafflesController::class,'index'])->name('raffles.users.index');
+
+    Route::prefix('collections')->group(function(){
+        Route::get('',[CollectionsController::class,'index'])->name('collections.index');
+    });
 });
 Route::prefix('payments')->group(function(){
     Route::post('generate',[PaymentLinksController::class,'generateLink']);
