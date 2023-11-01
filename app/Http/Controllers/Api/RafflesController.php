@@ -61,8 +61,8 @@ class RafflesController extends Controller
         $user = $request->user();
         $rafflesForUser = UserRaffle::where('user_id',$user->id)->get(['raffle_id'])->pluck('raffle_id')->toArray();
         $rafflesForAdmin = AdminRaffle::where('user_id',$user->id)->get(['raffle_id'])->pluck('raffle_id')->toArray();
-         
-        $raffles->where("id",array_merge($rafflesForUser,$rafflesForAdmin));
+        $raffleIds = array_merge($rafflesForUser,$rafflesForAdmin);
+        $raffles->whereIn("id",$raffleIds);
         foreach($request->input('filters',[]) as $key => $value){
             $raffles->{$key}($value);
         }
@@ -80,6 +80,9 @@ class RafflesController extends Controller
             unset($params['image']);
         }
         $raffle = Raffle::create($params);
+        $raffle->load([
+            'admin','users'
+        ]);
         $raffle->admin()->attach($request->user()->id);
         $raffle->users()->attach($request->user()->id,[
             "id" => (string) Str::uuid()

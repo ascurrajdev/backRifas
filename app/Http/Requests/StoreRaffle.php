@@ -24,7 +24,8 @@ class StoreRaffle extends FormRequest
         return [
             'description' => ['required','string','min:3', 'max:255'],
             'amount' => ['required','numeric'],
-            'image' => ['file','mimes:png,jpg']
+            'image' => ['file','mimes:png,jpg'],
+            'quantity' => ['numeric','min:1'],
         ];
     }
 }
