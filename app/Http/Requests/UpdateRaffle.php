@@ -22,7 +22,8 @@ class UpdateRaffle extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'description' => ['string','min:3'],
+            'amount' => ['numeric','min:1']
         ];
     }
 }

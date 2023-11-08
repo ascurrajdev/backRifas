@@ -92,6 +92,9 @@ class RafflesController extends Controller
 
     public function update(Raffle $raffle, UpdateRaffle $request){
         $params = $request->validated();
+        $raffle->fill($params);
+        $raffle->save();
+        return new RaffleResource($raffle);
     }
     public function destroy(Raffle $raffle){
         $raffle->delete();
