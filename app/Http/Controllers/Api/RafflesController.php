@@ -84,9 +84,6 @@ class RafflesController extends Controller
             'admin','users'
         ]);
         $raffle->admin()->attach($request->user()->id);
-        $raffle->users()->attach($request->user()->id,[
-            "id" => (string) Str::uuid()
-        ]);
         return new RaffleResource($raffle);
     }
 

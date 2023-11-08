@@ -12,7 +12,7 @@ class AdminRafflesController extends Controller
 {
     public function index($raffle){
         $this->authorize("viewAny",[AdminRaffle::class, $raffle]);
-        return AdminRaffleResource::collection(AdminRaffle::with('user')->get());
+        return AdminRaffleResource::collection(AdminRaffle::with('user')->where('raffle_id',$raffle)->get());
     }
     
     public function show(Raffle $raffle, AdminRaffle $adminRaffle){
