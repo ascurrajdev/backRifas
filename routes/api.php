@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::delete('raffles/{raffle}/admin/{adminRaffle}',[AdminRafflesController::class,'delete'])->name('raffles.admin.delete');
     Route::get('raffles/details/{token}',[RafflesController::class, 'getDetails'])->withoutMiddleware('auth:sanctum');
     Route::get('raffles/{raffle}/users',[UserRafflesController::class,'index'])->name('raffles.users.index');
+    Route::delete('raffles/{raffle}/users/{userRaffle}',[UserRafflesController::class, 'destroy'])->name('raffles.users.destroy');
 
     Route::prefix('collections')->group(function(){
         Route::get('',[CollectionsController::class,'index'])->name('collections.index');

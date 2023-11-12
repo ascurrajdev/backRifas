@@ -20,4 +20,9 @@ class UserRafflesController extends Controller
         $usersRaffle = UserRaffle::with(['user'])->where('raffle_id',$raffle->id)->get();
         return $this->success($usersRaffle);
     }
+
+    public function destroy(Raffle $raffle, UserRaffle $userRaffle){
+        $userRaffle->delete();
+        return $this->success($userRaffle);
+    }
 }
