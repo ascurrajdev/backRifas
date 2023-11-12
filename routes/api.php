@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\PaymentLinksController;
 use App\Http\Controllers\Api\RafflesController;
 use App\Http\Controllers\Api\UserRafflesController;
+use App\Http\Controllers\Api\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::post('',[ClientsController::class, 'store'])->name('store')->withoutMiddleware('auth:sanctum');
         Route::delete('{client}',[ClientsController::class, 'delete'])->name('delete');
     });
+    Route::get('users/search',[UsersController::class, 'search']);
     Route::apiResource("raffles",RafflesController::class);
     Route::get('raffles/{raffle}/statistics',[RafflesController::class, 'statistics'])->name('raffles.statistics');
     Route::get('raffles/{raffle}/admin',[AdminRafflesController::class,'index'])->name('raffles.admin.index');
@@ -35,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::delete('raffles/{raffle}/admin/{adminRaffle}',[AdminRafflesController::class,'delete'])->name('raffles.admin.delete');
     Route::get('raffles/details/{token}',[RafflesController::class, 'getDetails'])->withoutMiddleware('auth:sanctum');
     Route::get('raffles/{raffle}/users',[UserRafflesController::class,'index'])->name('raffles.users.index');
+    Route::post('raffles/{raffle}/users',[UserRafflesController::class,'store'])->name('raffles.users.store');
     Route::delete('raffles/{raffle}/users/{userRaffle}',[UserRafflesController::class, 'destroy'])->name('raffles.users.destroy');
 
     Route::prefix('collections')->group(function(){
