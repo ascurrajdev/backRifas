@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CollectionsController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\PaymentLinksController;
 use App\Http\Controllers\Api\RafflesController;
+use App\Http\Controllers\Api\StatisticsController;
 use App\Http\Controllers\Api\UserRafflesController;
 use App\Http\Controllers\Api\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::delete('{client}',[ClientsController::class, 'delete'])->name('delete');
     });
     Route::get('users/search',[UsersController::class, 'search']);
+    Route::get('statistics/general',[StatisticsController::class,'general']);
     Route::apiResource("raffles",RafflesController::class);
     Route::get('raffles/{raffle}/statistics',[RafflesController::class, 'statistics'])->name('raffles.statistics');
     Route::get('raffles/{raffle}/admin',[AdminRafflesController::class,'index'])->name('raffles.admin.index');

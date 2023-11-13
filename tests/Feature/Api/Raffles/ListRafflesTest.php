@@ -21,11 +21,11 @@ class ListRafflesTest extends TestCase
         Sanctum::actingAs($user, [
             "*"
         ]);
-        Raffle::factory()->count(10)->create();
+        Raffle::factory()->count(10)->for($user)->create();
         $raffle = Raffle::first();
         AdminRaffle::factory()->for($raffle)->for($user)->create();
         $response = $this->getJson(route("api.raffles.index"));
         $response->assertSuccessful();
-        $response->assertJsonCount(1,"data");
+        $response->assertJsonCount(10,"data");
     }
 }

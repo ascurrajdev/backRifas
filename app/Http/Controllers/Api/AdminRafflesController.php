@@ -7,6 +7,7 @@ use App\Http\Requests\StoreAdminRaffle;
 use App\Http\Resources\AdminRaffleResource;
 use App\Models\AdminRaffle;
 use App\Models\Raffle;
+use Illuminate\Http\Request;
 
 class AdminRafflesController extends Controller
 {

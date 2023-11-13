@@ -19,6 +19,10 @@ class Raffle extends Model
         return $this->belongsToMany(User::class,"user_raffles");
     }
 
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
     public function numbers(){
         return $this->hasMany(RaffleNumber::class);
     }
