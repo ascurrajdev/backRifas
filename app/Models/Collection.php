@@ -30,4 +30,8 @@ class Collection extends Model
     public function raffleNumbers(){
         return $this->hasMany(RaffleNumber::class);
     }
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s'
+    ];
 }

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class CollectionsController extends Controller
 {
     public function index(Request $request){
-        $collection = Collection::query();
+        $collection = Collection::with(['user','client']);
         foreach($request->input('filters', []) as $filter => $value){
             $collection->{$filter}($value);
         }
